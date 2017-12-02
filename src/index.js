@@ -1,8 +1,11 @@
 import Vue from 'vue'
-import App from './App'
+import Vuex from 'vuex'
+import News from './components/News'
+
+Vue.use(Vuex);
 
 new Vue({
     el: '#app',
-    template: '<App/>',
-    components: { App }
-})
+    template: '<News/>',
+    components: { News }
+});

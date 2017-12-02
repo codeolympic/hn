@@ -25,7 +25,7 @@ module.exports = {
         }),
         // generate the index.html
         new HtmlWebpackPlugin({
-            title: 'hack news vuejs',
+            title: 'HN',
             template: SRC_DIR + '/index.ejs'
         })
     ],
@@ -47,16 +47,16 @@ module.exports = {
         ]
     },
     resolve: {
-        // by default vuejs is dong the 'runtime' build which won't include the 'compiler'
+        // by default vuejs is doing the 'runtime' build which won't include the 'compiler'
         // in that case, any '*.vue' template file won't be compiled.
         // in order to compile the '*.vue' template file, the compiler has be to included.
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
         },
-        // add '.vue' to import without specify the file type
+        // add '.vue' to import without specifying the file type
         extensions: ['.vue', '.js', '.jsx', '.json', 'css']
     },
-    // IMPORTANT: the Html-Webpack-Plugin WILL NOT writes files to the local
+    // IMPORTANT: the Html-Webpack-Plugin WILL NOT write files to the local
     // file system when it is used by the Webpack-Development-Server
     devServer: {
         host: '0.0.0.0',

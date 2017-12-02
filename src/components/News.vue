@@ -1,12 +1,13 @@
 <template>
-    <div id="app">
+    <div id="news">
         <h1>{{ msg }}</h1>
     </div>
 </template>
 
 <script>
+    // export with the name 'News'
     export default {
-        name: 'app',
+        name: 'news',
         data() {
             return {
                 msg: 'hello'
@@ -16,7 +17,7 @@
 </script>
 
 <style>
-    #app {
+    #news {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
