@@ -1,11 +1,26 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import News from './components/News'
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import DevTools from './devTools'
+import reducers from './reducers'
 
-Vue.use(Vuex);
+const store = createStore(
+    reducers,
+    compose(
+        DevTools.instrument(),
+        // allow async dispatch function
+        applyMiddleware(thunk)
+    )
+);
 
-new Vue({
-    el: '#app',
-    template: '<News/>',
-    components: { News }
-});
+// requires babel-react to compile
+render(
+    <Provider store={store}>
+        <div>
+            <DevTools/>
+        </div>
+    </Provider>,
+    document.getElementById('hn')
+);

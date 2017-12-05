@@ -32,8 +32,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.vue$/,
-                use: ['vue-loader'],
+                test: /\.jsx?$/,
+                use: ['react-hot-loader', 'babel-loader'],
                 include: SRC_DIR
             },
             {
@@ -47,14 +47,7 @@ module.exports = {
         ]
     },
     resolve: {
-        // by default vuejs is doing the 'runtime' build which won't include the 'compiler'
-        // in that case, any '*.vue' template file won't be compiled.
-        // in order to compile the '*.vue' template file, the compiler has be to included.
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        },
-        // add '.vue' to import without specifying the file type
-        extensions: ['.vue', '.js', '.jsx', '.json', 'css']
+        extensions: ['.js', '.jsx', '.json', 'css']
     },
     // IMPORTANT: the Html-Webpack-Plugin WILL NOT write files to the local
     // file system when it is used by the Webpack-Development-Server
