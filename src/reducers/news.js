@@ -12,6 +12,8 @@ const news = (state = [], action) => {
             return action.news;
         case FETCH_NEWS_FAILURE:
             return state;
+        default:
+            return state;
     }
 };
 

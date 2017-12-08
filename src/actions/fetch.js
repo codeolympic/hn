@@ -35,9 +35,21 @@ export const fetchNews = () => {
     return (dispatch) => {
         dispatch(fetchNewsRequest());
 
-        return axios.get('TODO').then(
-            (resp) => dispatch(fetchNewsSuccess(resp.data)),
+        // TODO: fetch each page
+        return axios.get('https://hn.algolia.com/api/v1/search_by_date?tags=story').then(
+            (resp) => dispatch(fetchNewsSuccess(toNews(resp.data))),
             (err) => dispatch(fetchNewsFailure(err))
         );
     }
+};
+
+let toNews = (respData) => {
+    return respData['hits'].map((hit) => {
+        return {
+            title: hit['title'],
+            created: hit['created_at'],
+            author: hit['author'],
+            link: hit['url']
+        }
+    });
 };

@@ -5,13 +5,15 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import DevTools from './devTools'
 import reducers from './reducers'
+import NewsList from './components/NewsList'
 
 const store = createStore(
     reducers,
     compose(
-        DevTools.instrument(),
         // allow async dispatch function
-        applyMiddleware(thunk)
+        // 'applyMiddleware' must be the first argument!!
+        applyMiddleware(thunk),
+        DevTools.instrument()
     )
 );
 
@@ -19,6 +21,7 @@ const store = createStore(
 render(
     <Provider store={store}>
         <div>
+            <NewsList/>
             <DevTools/>
         </div>
     </Provider>,
