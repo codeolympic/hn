@@ -1,19 +1,38 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Rx } from 'rx'
 import OneNews from './OneNews'
 import { fetchNews } from "../actions/fetch";
 
 class NewsList extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.loadMore.bind(this);
+
+        // TODO: better way to initialize??
+        this.loadMore();
     }
 
-    componentWillMount() {
-        const { fetchNews } = this.props;
-        fetchNews()
+    componentWillUnmount() {
+        // window.removeEventListener('scroll', this.loadMore);
     }
 
-    // TODO: infinite list
+    componentDidMount() {
+        window.addEventListener('scroll', this.loadMore);
+    }
+
+    componentDidUpdate() {
+        window.addEventListener('scroll', this.loadMore);
+    }
+
+    loadMore = () => {
+        let { fetchNews } = this.props;
+
+        Rx.Observable.fromEvent(window, 'scroll');
+
+        // TODO:
+    };
+
     render() {
         const { news } = this.props;
         return (
