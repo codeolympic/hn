@@ -17,6 +17,10 @@ const store = createStore(
     )
 );
 
+// TODO: cache (web or backend?)
+// TODO: to watch list
+// TODO: tree shaking
+
 // requires babel-react to compile
 render(
     <Provider store={store}>

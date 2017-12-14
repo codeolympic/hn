@@ -1,40 +1,41 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Rx } from 'rx'
+import { Observable } from 'rxjs/Rx'
 import OneNews from './OneNews'
 import { fetchNews } from "../actions/fetch";
 
 class NewsList extends React.Component {
     constructor(props) {
         super(props);
-        this.loadMore.bind(this);
+        this.fetchMore.bind(this);
+    }
 
-        // TODO: better way to initialize??
-        this.loadMore();
+    // TODO: slow
+    componentWillMount() {
+        this.props.fetchNews();
     }
 
     componentWillUnmount() {
-        // window.removeEventListener('scroll', this.loadMore);
+        window.removeEventListener('scroll', this.fetchMore);
     }
 
     componentDidMount() {
-        window.addEventListener('scroll', this.loadMore);
+        window.addEventListener('scroll', this.fetchMore);
     }
 
-    componentDidUpdate() {
-        window.addEventListener('scroll', this.loadMore);
-    }
-
-    loadMore = () => {
-        let { fetchNews } = this.props;
-
-        Rx.Observable.fromEvent(window, 'scroll');
-
-        // TODO:
+    fetchMore = () => {
+        validScrollDown.subscribe(
+            (e) => {
+                // TODO: dispatch action
+                console.log('valid scroll')
+            },
+            (err) => {
+                console.log(err);
+            })
     };
 
     render() {
-        const { news } = this.props;
+        const {news} = this.props;
         return (
             <ul>
                 {news.map(oneNews =>
@@ -45,7 +46,23 @@ class NewsList extends React.Component {
     }
 }
 
-const mapStateToProps = ({ news }) => ({ news });
+/**
+ * Return the 'scroll' event only when scrolling down.
+ */
+const validScrollDown = Observable.fromEvent(window, 'scroll')
+    .map(e => ({
+        scrollHeight: e.target.scrollingElement.scrollHeight,
+        scrollTop: e.target.scrollingElement.scrollTop,
+        clientHeight: e.target.scrollingElement.clientHeight
+    }))
+    .pairwise()
+    .filter(positions => {
+        return (positions[0].scrollTop < positions[1].scrollTop)
+            // TODO: to many events
+            && (positions[1].scrollTop + positions[1].clientHeight === positions[1].scrollHeight)
+    });
+
+const mapStateToProps = ({news}) => ({news});
 
 const mapDispatchToProps = (dispatch) => {
     return {
