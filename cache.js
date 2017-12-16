@@ -1,6 +1,5 @@
 const port = process.env.PORT || 3000;
 const chunkSize = process.env.CHUNK || 50;
-
 const express = require('express');
 
 let server = express();
@@ -37,8 +36,18 @@ let fetchIds = () => {
 
 let fetchNews = (newsIds) => {
     return Promise.all(newsIds.map((newsId) => {
+
+        let cache = read(newsId);
+
+        if (cache) {
+            console.log(`cache hit: ${newsId}`);
+            return cache;
+        }
+
         return axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json`).then(
             (res) => {
+                console.log(`update cache: ${newsId}`);
+                write(res.data);
                 return res.data;
             },
             (err) => {
@@ -48,4 +57,18 @@ let fetchNews = (newsIds) => {
     }));
 };
 
-// TODO: save resp to https://github.com/typicode/lowdb
+const lowdb = require('lowdb');
+// TODO: FileAsync
+const FileSync = require('lowdb/adapters/FileSync');
+const dbfile = new FileSync('cache.db');
+const db = lowdb(dbfile);
+
+db.defaults({ news: [] }).write();
+
+let write = (news) => {
+    return db.get('news').push(news).write();
+};
+
+let read = (newsId) => {
+    return db.get('news').find({ id: newsId }).value();
+};
