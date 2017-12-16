@@ -7,7 +7,6 @@ import { fetchNews } from "../actions/fetch";
 class NewsList extends React.Component {
     constructor(props) {
         super(props);
-        this.fetchMore.bind(this);
     }
 
     // TODO: slow
@@ -16,15 +15,11 @@ class NewsList extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.fetchMore);
+        scroll$.unsubscribe();
     }
 
     componentDidMount() {
-        window.addEventListener('scroll', this.fetchMore);
-    }
-
-    fetchMore = () => {
-        validScrollDown.subscribe(
+        scroll$.subscribe(
             (e) => {
                 // TODO: dispatch action
                 console.log('valid scroll')
@@ -32,7 +27,7 @@ class NewsList extends React.Component {
             (err) => {
                 console.log(err);
             })
-    };
+    }
 
     render() {
         const {news} = this.props;
@@ -46,10 +41,13 @@ class NewsList extends React.Component {
     }
 }
 
-/**
+/*
  * Return the 'scroll' event only when scrolling down.
+ *
+ * Note: No need to attach the event listener.
  */
-const validScrollDown = Observable.fromEvent(window, 'scroll')
+const scroll$ = Observable.fromEvent(window, 'scroll')
+    .throttleTime(300)
     .map(e => ({
         scrollHeight: e.target.scrollingElement.scrollHeight,
         scrollTop: e.target.scrollingElement.scrollTop,
@@ -58,7 +56,6 @@ const validScrollDown = Observable.fromEvent(window, 'scroll')
     .pairwise()
     .filter(positions => {
         return (positions[0].scrollTop < positions[1].scrollTop)
-            // TODO: to many events
             && (positions[1].scrollTop + positions[1].clientHeight === positions[1].scrollHeight)
     });
 
