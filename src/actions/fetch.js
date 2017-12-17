@@ -36,7 +36,7 @@ export const fetchNews = () => {
         dispatch(fetchNewsRequest());
 
         // TODO: fetch each page
-        return axios.get('https://hn.algolia.com/api/v1/search_by_date?tags=story').then(
+        return axios.get('http://localhost/api/news').then(
             (resp) => dispatch(fetchNewsSuccess(toNews(resp.data))),
             (err) => dispatch(fetchNewsFailure(err))
         );
@@ -49,6 +49,7 @@ let toNews = (respData) => {
             title: hit['title'],
             created: hit['created_at'],
             author: hit['author'],
+            text: hit['text'],
             link: hit['url']
         }
     });
