@@ -36,7 +36,7 @@ export const fetchNews = () => {
         dispatch(fetchNewsRequest());
 
         // TODO: fetch each page
-        return axios.get('http://localhost/api/news').then(
+        return axios.get('/api/news').then(
             (resp) => dispatch(fetchNewsSuccess(toNews(resp.data))),
             (err) => dispatch(fetchNewsFailure(err))
         );

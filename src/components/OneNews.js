@@ -5,7 +5,7 @@ const OneNews = ({ title, created, link }) => (
         <div>
             <h3>{title}</h3>
             <p>{created}</p>
-            <p>{link}</p>
+            <a href={link}>{link}</a>
         </div>
       </li>
 );

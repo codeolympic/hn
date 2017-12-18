@@ -47,16 +47,14 @@ class NewsList extends React.Component {
  * Note: No need to attach the event listener.
  */
 const scroll$ = Observable.fromEvent(window, 'scroll')
-    .throttleTime(300)
+    .debounceTime(300)
     .map(e => ({
         scrollHeight: e.target.scrollingElement.scrollHeight,
         scrollTop: e.target.scrollingElement.scrollTop,
         clientHeight: e.target.scrollingElement.clientHeight
     }))
-    .pairwise()
-    .filter(positions => {
-        return (positions[0].scrollTop < positions[1].scrollTop)
-            && (positions[1].scrollTop + positions[1].clientHeight === positions[1].scrollHeight)
+    .filter((position) => {
+        return position.scrollTop + position.clientHeight === position.scrollHeight;
     });
 
 const mapStateToProps = ({news}) => ({news});
