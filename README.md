@@ -1,5 +1,4 @@
 ---
 Summary
-* prevent scroll event from firing too many times
-* use Rx to filter out invalid events
-* 
+* use Rx to debounce events and filter out invalid events
+* track the last fetched page for preventing fetching the same page multiple times 

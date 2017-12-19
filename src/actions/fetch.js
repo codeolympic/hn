@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 let nextId = 0;
+let nextPage = 1;
+let lastPage = -1;
 
 export const FETCH_NEWS_REQUEST = 'FETCH_NEWS_REQUEST';
 export const FETCH_NEWS_SUCCESS = 'FETCH_NEWS_SUCCESS';
@@ -20,7 +22,8 @@ export const fetchNewsSuccess = (news) => {
                 id: nextId++,
                 ...oneNews
             }
-        })
+        }),
+        page: nextPage++
     }
 };
 
@@ -33,13 +36,18 @@ export const fetchNewsFailure = (err) => {
 
 export const fetchNews = () => {
     return (dispatch) => {
-        dispatch(fetchNewsRequest());
-
-        // TODO: fetch each page
-        return axios.get('/api/news').then(
-            (resp) => dispatch(fetchNewsSuccess(toNews(resp.data))),
-            (err) => dispatch(fetchNewsFailure(err))
-        );
+        if (nextPage === lastPage) {
+            dispatch(fetchNewsFailure(`duplicate fetch: ${nextPage}`));
+        } else {
+            dispatch(fetchNewsRequest());
+            lastPage = nextPage;
+            return axios.get(`/api/news?page=${nextPage}`).then(
+                (resp) => {
+                    dispatch(fetchNewsSuccess(toNews(resp.data), nextPage))
+                },
+                (err) => dispatch(fetchNewsFailure(err))
+            );
+        }
     }
 };
 

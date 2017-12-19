@@ -9,7 +9,6 @@ class NewsList extends React.Component {
         super(props);
     }
 
-    // TODO: slow
     componentWillMount() {
         this.props.fetchNews();
     }
@@ -21,8 +20,7 @@ class NewsList extends React.Component {
     componentDidMount() {
         scroll$.subscribe(
             (e) => {
-                // TODO: dispatch action
-                console.log('valid scroll')
+                this.props.fetchNews();
             },
             (err) => {
                 console.log(err);
@@ -30,7 +28,7 @@ class NewsList extends React.Component {
     }
 
     render() {
-        const {news} = this.props;
+        const { news } = this.props;
         return (
             <ul>
                 {news.map(oneNews =>
@@ -57,7 +55,7 @@ const scroll$ = Observable.fromEvent(window, 'scroll')
         return position.scrollTop + position.clientHeight === position.scrollHeight;
     });
 
-const mapStateToProps = ({news}) => ({news});
+const mapStateToProps = ({ news }) => ({ news });
 
 const mapDispatchToProps = (dispatch) => {
     return {
