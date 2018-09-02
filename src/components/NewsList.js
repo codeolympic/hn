@@ -1,8 +1,11 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { Observable } from 'rxjs/Rx'
-import OneNews from './OneNews'
-import { fetchNews } from "../actions/fetch";
+import bulma from 'bulma/css/bulma.css';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Observable } from 'rxjs/Rx';
+import { fetchNewsIndex } from "../actions/fetchIndex";
+import { fetchNews } from "../actions/fetchNews";
+import store from '../store';
+import OneNews from './OneNews';
 
 class NewsList extends React.Component {
     constructor(props) {
@@ -10,7 +13,7 @@ class NewsList extends React.Component {
     }
 
     componentWillMount() {
-        this.props.fetchNews();
+        this.props.fetchNewsIndexAync();
     }
 
     componentWillUnmount() {
@@ -18,23 +21,39 @@ class NewsList extends React.Component {
     }
 
     componentDidMount() {
+        // fetching news if index has any change
+        // NOTE: maintain a class variable or React state to hold the previous state
+        // won't work here for some reason
+        // TODO: implement auto updating index
+        let nextState;
+        store.subscribe(() => {
+            let currentState = nextState;
+
+            const { newsIndex, offset } = store.getState();
+            nextState = newsIndex[0].newsId;
+
+            if (currentState !== nextState) {
+                this.props.fetchNewsAync(newsIndex, offset);
+            }
+        });
+
         scroll$.subscribe(
             (e) => {
-                this.props.fetchNews();
+                const { newsIndex, offset } = store.getState();
+                this.props.fetchNewsAync(newsIndex, offset)
             },
-            (err) => {
-                console.log(err);
-            })
+            (err) => console.log(err))
     }
 
     render() {
-        const { news } = this.props;
+        const { newsList, newsIndex } = this.props;
         return (
-            <ul>
-                {news.map(oneNews =>
-                    <OneNews key={oneNews.id} {...oneNews}/>
-                )}
-            </ul>
+            <div>
+                <div className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
+                    <div style={{margin: '2px 15px', textAlign: 'center', alignItems: 'center'}} className={bulma['navbar-brand']}>total news: {newsIndex.length}</div>
+                </div>
+                {newsList.map((oneNews) => <OneNews key={oneNews.id} {...oneNews}></OneNews>)}
+            </div>
         )
     }
 }
@@ -55,12 +74,11 @@ const scroll$ = Observable.fromEvent(window, 'scroll')
         return position.scrollTop + position.clientHeight === position.scrollHeight;
     });
 
-const mapStateToProps = ({ news }) => ({ news });
+const mapStateToProps = ({ newsIndex, newsList, offset }) => ({ newsIndex, newsList, offset });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchNews: () => dispatch(fetchNews())
-    }
-};
+const mapDispatchToProps = (dispatch) => ({
+    fetchNewsIndexAync: () => dispatch(fetchNewsIndex()),
+    fetchNewsAync: (newsIndex, offset) => dispatch(fetchNews(newsIndex, offset))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsList);

@@ -1,8 +1,11 @@
-import { combineReducers } from 'redux'
-import news from './news'
+import { combineReducers } from 'redux';
+import { newsList, offset } from './news';
+import newsIndex from './newsIndex';
 
 const reducers = combineReducers({
-    news
+    newsIndex,
+    newsList,
+    offset
 });
 
 export default reducers

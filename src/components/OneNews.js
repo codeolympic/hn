@@ -1,24 +1,27 @@
-import React from 'react'
+import bulma from 'bulma/css/bulma.css';
+import React from 'react';
+import moment from 'moment';
 
 class OneNews extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    shouldComponentUpdate(nextProps) {
-        return nextProps.id!== this.props.id;
-    }
-
     render() {
-        const { title, created, link } = this.props;
+        const { title, type, time, by, url, score } = this.props;
         return (
-            <li>
-                <div>
-                    <h3>{title}</h3>
-                    <p>{created}</p>
-                    <a href={link}>{link}</a>
-                </div>
-            </li>
+            <div style={{ margin: '20px' }} className={bulma['card']}>
+                <header className={bulma['card-header']}>
+                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-warning']].join(' ')}>{type}</p>
+                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-dark']].join(' ')}>{moment.unix(time).format('YYYY-MM-DD')}</p>
+                    <a style={{ margin: '5px' }} className={bulma['card-header-title']} href={url}>{title}</a>
+                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-dark']].join(' ')}>by: {by}</p>
+                </header>
+                <footer className={bulma['card-footer']}>
+                    
+                    <p className={bulma['card-footer-item']}>score: {score}</p>
+                </footer>
+            </div>
         )
     }
 }
