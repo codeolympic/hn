@@ -1,14 +1,17 @@
-let resolve = require('path').resolve;
-let webpack = require('webpack');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
+const resolve = require('path').resolve;
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // webpack build require absolute path
 const BUILD_DIR = resolve(__dirname, 'dist');
 const PUBLIC_PATH = resolve(__dirname, '/');
 const SRC_DIR = resolve(__dirname, 'src');
 
+const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
+
 module.exports = {
+    mode: mode,
     // be able to debug with the source code
     devtool: 'source-map',
     entry: SRC_DIR + '/index.js',
@@ -19,9 +22,9 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin({
-            filename: 'bundle.css',
-            allChunks: true
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css'
         }),
         // generate the index.html
         new HtmlWebpackPlugin({
@@ -38,11 +41,11 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
+                use: [
+                    MiniCssExtractPlugin.loader,
                     // load css as module
-                    use: 'css-loader?modules&sourceMap&localIdentName="[name]__[local]__[hash:base64:5]"'
-                })
+                    'css-loader?modules&sourceMap&localIdentName="[name]__[local]__[hash:base64:5]"'
+                ]
             }
         ]
     },

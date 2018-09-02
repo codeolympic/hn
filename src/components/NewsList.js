@@ -21,10 +21,17 @@ class NewsList extends React.Component {
     }
 
     componentDidMount() {
-        // fetching news if index has any change
-        // NOTE: maintain a class variable or React state to hold the previous state
-        // won't work here for some reason
-        // TODO: implement auto updating index
+        /**
+         * Fetching news if index has any change.
+         * 
+         * TODO: implement auto updating
+         * 
+         * NOTE: 
+         * - maintain a class variable or React state to hold the previous state
+         * won't work here for some reason
+         * 
+         * - hacker news api will append new id to the head of the list
+         */
         let nextState;
         store.subscribe(() => {
             let currentState = nextState;

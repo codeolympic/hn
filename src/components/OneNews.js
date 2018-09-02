@@ -18,7 +18,6 @@ class OneNews extends React.Component {
                     <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-dark']].join(' ')}>by: {by}</p>
                 </header>
                 <footer className={bulma['card-footer']}>
-                    
                     <p className={bulma['card-footer-item']}>score: {score}</p>
                 </footer>
             </div>
