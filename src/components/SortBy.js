@@ -17,11 +17,11 @@ class SortBy extends React.Component {
                         <span>Sort</span>
                     </button>
                 </div>
-                <div style={{ marginTop: '3px' }} className={bulma['dropdown-menu']} role='menu' id='dropdown-menu-ctrl'>
-                    <div className={bulma['dropdown-content']}>
-                        <a className={bulma['dropdown-item']} onClick={sortByScore}>By Score</a>
+                <div className={bulma['dropdown-menu']} role='menu' id='dropdown-menu-ctrl'>
+                    <div style={{ width: '50%' }} className={bulma['dropdown-content']}>
+                        <a style={{ paddingTop: '0', paddingBottom: '0' }} className={bulma['dropdown-item']} onClick={sortByScore}>By Score</a>
                         <hr className={bulma['dropdown-divider']}></hr>
-                        <a className={bulma['dropdown-item']} onClick={sortByDate}>By Date</a>
+                        <a style={{ paddingTop: '0', paddingBottom: '0' }} className={bulma['dropdown-item']} onClick={sortByDate}>By Date</a>
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@ class CheckUpdates extends React.Component {
     render() {
         const { newsIndex, checkUpdatesAsync } = this.props;
         return (
-            <button style={{ margin: '15px 2px' }} className={[bulma['button'], bulma['is-small'], bulma['is-dark']].join(' ')} disabled={newsIndex.inProgress} onClick={checkUpdatesAsync}>Check Updates</button>
+            <button style={{ margin: '0px 5px' }} className={[bulma['button'], bulma['is-small'], bulma['is-dark']].join(' ')} disabled={newsIndex.inProgress} onClick={checkUpdatesAsync}>Check Updates</button>
         );
     }
 }

@@ -15,10 +15,10 @@ class OneNews extends React.Component {
         return (
             <div style={{ margin: '20px' }} className={bulma['card']}>
                 <header className={bulma['card-header']}>
-                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-warning']].join(' ')}>{type}</p>
-                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-dark']].join(' ')}>{moment.unix(time).format('YYYY-MM-DD')}</p>
+                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-warning'], bulma['is-hidden-mobile']].join(' ')}>{type}</p>
                     <a style={{ margin: '5px' }} className={bulma['card-header-title']} href={url} target='_blank'>{title}</a>
-                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-dark']].join(' ')}>by: {by}</p>
+                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-dark']].join(' ')}>{moment.unix(time).format('YYYY-MM-DD')}</p>
+                    <p style={{ margin: '5px' }} className={[bulma['tag'], bulma['is-dark'], bulma['is-hidden-mobile']].join(' ')}>by: {by}</p>
                 </header>
                 <footer className={bulma['card-footer']}>
                     <p className={bulma['card-footer-item']}>score: {score}</p>
