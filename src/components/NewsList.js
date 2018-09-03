@@ -5,7 +5,9 @@ import { Observable } from 'rxjs/Rx';
 import { fetchNewsIndex } from "../actions/fetchIndex";
 import { fetchNews } from "../actions/fetchNews";
 import store from '../store';
+import CheckUpdates from './CheckUpdates';
 import OneNews from './OneNews';
+import SortBy from './SortBy';
 
 class NewsList extends React.Component {
     constructor(props) {
@@ -18,48 +20,44 @@ class NewsList extends React.Component {
 
     componentWillUnmount() {
         scroll$.unsubscribe();
+        store.unsubscribe();
     }
 
     componentDidMount() {
-        /**
-         * Fetching news if index has any change.
-         * 
-         * TODO: implement auto updating
-         * 
-         * NOTE: 
-         * - maintain a class variable or React state to hold the previous state
-         * won't work here for some reason
-         * 
-         * - hacker news api will append new id to the head of the list
-         */
+        // reload news for any change of the news index state
         let nextState;
         store.subscribe(() => {
             let currentState = nextState;
 
             const { newsIndex, offset } = store.getState();
-            nextState = newsIndex[0].newsId;
+            nextState = newsIndex.newsIds[0] ? newsIndex.newsIds[0].newsId : [];
 
-            if (currentState !== nextState) {
-                this.props.fetchNewsAync(newsIndex, offset);
+            if (!nextState || currentState !== nextState) {
+                this.props.fetchNewsAync(newsIndex.newsIds, offset);
             }
         });
 
         scroll$.subscribe(
             (e) => {
-                const { newsIndex, offset } = store.getState();
-                this.props.fetchNewsAync(newsIndex, offset)
+                const { newsIndex, offset } = this.props;
+                this.props.fetchNewsAync(newsIndex.newsIds, offset)
             },
             (err) => console.log(err))
     }
 
     render() {
         const { newsList, newsIndex } = this.props;
+        const topbarHeight = 50;
         return (
             <div>
-                <div className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
-                    <div style={{margin: '2px 15px', textAlign: 'center', alignItems: 'center'}} className={bulma['navbar-brand']}>total news: {newsIndex.length}</div>
+                <div style={{ position: 'fixed', width: '100%', height: `${topbarHeight}px`, top: '0' }} className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
+                    <div style={{ margin: '2px 15px', textAlign: 'center', alignItems: 'center' }} className={bulma['navbar-brand']}>total news: {newsIndex.newsIds.length}</div>
+                    <CheckUpdates />
+                    <SortBy />
                 </div>
-                {newsList.map((oneNews) => <OneNews key={oneNews.id} {...oneNews}></OneNews>)}
+                <div style={{ marginTop: `${topbarHeight * 1.3}px` }}>
+                    {newsList.map((oneNews) => <OneNews key={oneNews.id} {...oneNews}></OneNews>)}
+                </div>
             </div>
         )
     }
@@ -85,7 +83,7 @@ const mapStateToProps = ({ newsIndex, newsList, offset }) => ({ newsIndex, newsL
 
 const mapDispatchToProps = (dispatch) => ({
     fetchNewsIndexAync: () => dispatch(fetchNewsIndex()),
-    fetchNewsAync: (newsIndex, offset) => dispatch(fetchNews(newsIndex, offset))
+    fetchNewsAync: (newsIds, offset) => dispatch(fetchNews(newsIds, offset))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsList);

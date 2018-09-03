@@ -14,8 +14,3 @@ Run production locally
 ```
 npm start
 ```
-
-TODO:
-- reduce webpack chunk size
-- implement auto updating
-- apply PWA

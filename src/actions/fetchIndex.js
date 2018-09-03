@@ -8,17 +8,20 @@ export const FETCH_NEWS_INDEX_FAILURE = 'FETCH_NEWS_INDEX_FAILURE';
 
 export const fetchNewsIndexRequest = () => {
     return {
-        type: FETCH_NEWS_INDEX_REQUEST
+        type: FETCH_NEWS_INDEX_REQUEST,
+        inProgress: true,
+        newsIds: []
     }
 };
 
-export const fetchNewsIndexSuccess = (newsIndex) => {
+export const fetchNewsIndexSuccess = (newsIds) => {
     return {
         type: FETCH_NEWS_INDEX_SUCCESS,
-        newsIndex: newsIndex.map((newsId) => {
+        inProgress: false,
+        newsIds: newsIds.map((newsId) => {
             return {
                 id: nextId++,
-                newsId
+                newsId,
             }
         })
     }
@@ -27,6 +30,8 @@ export const fetchNewsIndexSuccess = (newsIndex) => {
 export const fetchNewsIndexFailure = (err) => {
     return {
         type: FETCH_NEWS_INDEX_FAILURE,
+        inProgress: false,
+        newsIds: [],
         err
     }
 };
