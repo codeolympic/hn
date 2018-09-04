@@ -51,7 +51,7 @@ class NewsList extends React.Component {
         return (
             <div>
                 <div style={{ position: 'fixed', width: '100%', height: `${topbarHeight}px`, top: '0' }} className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
-                    <div style={{ margin: '2px 15px', textAlign: 'center', alignItems: 'center' }} className={bulma['navbar-brand']}>total news: {newsIndex.newsIds.length}
+                    <div style={{ margin: '0px 15px', textAlign: 'center', alignItems: 'center' }} className={bulma['navbar-brand']}>total news: {newsIndex.newsIds.length}
                         <CheckUpdates />
                         <SortBy />
                     </div>
