@@ -64,11 +64,6 @@ class NewsList extends React.Component {
     }
 }
 
-/*
- * Return the 'scroll' event only when scrolling down.
- *
- * Note: No need to attach the event listener.
- */
 const scroll$ = Observable.fromEvent(window, 'scroll')
     .debounceTime(300)
     .map(e => ({
@@ -77,7 +72,8 @@ const scroll$ = Observable.fromEvent(window, 'scroll')
         clientHeight: e.target.scrollingElement.clientHeight
     }))
     .filter((position) => {
-        return position.scrollTop + position.clientHeight === position.scrollHeight;
+        // return the 'scroll' event only when scrolling down
+        return position.scrollTop + position.clientHeight >= position.scrollHeight;
     });
 
 const mapStateToProps = ({ newsIndex, newsList, offset }) => ({ newsIndex, newsList, offset });
