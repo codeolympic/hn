@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { Observable } from 'rxjs/Rx';
 
 let nextId = 0;
 
-const batchSize = 20;
+const pageSize = 20;
 
 export const FETCH_NEWS_REQUEST = 'FETCH_NEWS_REQUEST';
 export const FETCH_NEWS_SUCCESS = 'FETCH_NEWS_SUCCESS';
@@ -66,24 +67,19 @@ export const fetchNews = (newsIds, offset) => {
             return;
         }
 
-        const promises = [];
+        const observables = [];
         let index = offset;
-        for (; index < (newsIds.length && (offset + batchSize)); index++) {
-            const promise = axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsIds[index].newsId}.json`);
-            promises.push(promise);
+        for (; index < (newsIds.length && (offset + pageSize)); index++) {
+            const ob = Observable.fromPromise(axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsIds[index].newsId}.json`));
+            observables.push(ob);
         }
 
-        return Promise.all(promises).then(
+        // instead of doing batch process (Promise.all), using stream process (Observable.merge)
+        return Observable.merge(...observables).subscribe(
             (resp) => {
-                const newsList = resp.map((resp) => {
-                    return {
-                        id: nextId++,
-                        ...resp.data,
-                    } 
-                });
-
-                dispatch(updateOffset(index));
-                dispatch(fetchNewsSuccess(newsList))
+                offset++;
+                dispatch(updateOffset(offset));
+                dispatch(fetchNewsSuccess([{ id: nextId++, ...resp.data }]));
             }),
             (err) => {
                 disptch(fetchNewsFailure(err));

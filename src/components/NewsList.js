@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Rx';
 import { fetchNewsIndex } from "../actions/fetchIndex";
 import { fetchNews } from "../actions/fetchNews";
 import store from '../store';
-import CheckUpdates from './CheckUpdates';
 import OneNews from './OneNews';
 import SortBy from './SortBy';
 
@@ -38,21 +37,37 @@ class NewsList extends React.Component {
         });
 
         scroll$.subscribe(
-            (e) => {
+            (position) => {
                 const { newsIndex, offset } = this.props;
-                this.props.fetchNewsAync(newsIndex.newsIds, offset)
+                
+                if (position.scrollTop + position.clientHeight >= position.scrollHeight) {
+                    // scroll to bottom
+                    this.props.fetchNewsAync(newsIndex.newsIds, offset);
+                } else if (position.scrollTop <= 0) {
+                    // scroll to top
+                    this.props.fetchNewsIndexAync();
+                }
             },
             (err) => console.log(err))
     }
 
-    render() {
+    loadingProgress = () => {
         const { newsList, newsIndex } = this.props;
+        let progress = '';
+        if (newsIndex.newsIds && newsList) {
+            progress = `${newsIndex.newsIds.length}/${newsList.length}`
+        }
+        return progress;
+    }
+
+    render() {
+        const { newsList } = this.props;
         const topbarHeight = 50;
         return (
             <div>
                 <div style={{ position: 'fixed', width: '100%', height: `${topbarHeight}px`, top: '0' }} className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
-                    <div style={{ margin: '0px 15px', textAlign: 'center', alignItems: 'center' }} className={bulma['navbar-brand']}>total news: {newsIndex.newsIds.length}
-                        <CheckUpdates />
+                    <div style={{ margin: '0px 15px', textAlign: 'center', alignItems: 'center' }} className={bulma['navbar-brand']}>
+                        {this.loadingProgress()}
                         <SortBy />
                     </div>
                 </div>
@@ -71,10 +86,6 @@ const scroll$ = Observable.fromEvent(window, 'scroll')
         scrollTop: e.target.scrollingElement.scrollTop,
         clientHeight: e.target.scrollingElement.clientHeight
     }))
-    .filter((position) => {
-        // return the 'scroll' event only when scrolling down
-        return position.scrollTop + position.clientHeight >= position.scrollHeight;
-    });
 
 const mapStateToProps = ({ newsIndex, newsList, offset }) => ({ newsIndex, newsList, offset });
 

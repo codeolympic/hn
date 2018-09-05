@@ -2,15 +2,20 @@ https://hn-wduan.herokuapp.com/
 
 Install dependencies
 ```
-npm install
+yarn install
 ```
 
-Run locally
+Build
+```
+npm run build
+```
+
+Run app locally on port 9000
 ```
 npm run start:dev
 ```
 
-Run production locally
+Run app locally with express on port 8080
 ```
 npm start
 ```
