@@ -15,9 +15,9 @@ class SortBy extends React.Component {
     render() {
         const { newsIndex, newsList, sortByScore, sortByDate } = this.props;
         return (
-            <div style={{ margin: '0px 3px '}}>
-                <a href='#' className={[bulma['button'], bulma['is-small'], bulma['is-text']].join(' ')} disabled={!newsList || newsList.length < 1 || newsIndex.inProgress} onClick={sortByScore}>By Score</a>
-                <a href='#' className={[bulma['button'], bulma['is-small'], bulma['is-text']].join(' ')} disabled={!newsList || newsList.length < 1 || newsIndex.inProgress} onClick={sortByDate}>By Date</a>
+            <div style={{ margin: '0px 10px '}}>
+                <a style={{ margin: '0px 5px' }} className={[bulma['has-text-dark'], bulma['is-size-7']].join(' ')} href='#' disabled={!newsList || newsList.length < 1 || newsIndex.inProgress} onClick={sortByScore}>By Score</a>
+                <a style={{ margin: '0px 5px' }} className={[bulma['has-text-dark'], bulma['is-size-7']].join(' ')} href='#' disabled={!newsList || newsList.length < 1 || newsIndex.inProgress} onClick={sortByDate}>By Date</a>
             </div>
         );
     }
