@@ -1,15 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import NewsList from './components/NewsList';
+import HnList from './components/HnList';
 import store from './store';
 
 // requires babel-react to compile
 render(
     <Provider store={store}>
         <div>
-            <NewsList />
+            <HnList />
         </div>
     </Provider>,
-    document.getElementById('hn')
+    document.getElementById('hackerNews')
 );

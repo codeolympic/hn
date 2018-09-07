@@ -1,20 +1,20 @@
 import {
-    FETCH_NEWS_INDEX_REQUEST,
-    FETCH_NEWS_INDEX_SUCCESS,
-    FETCH_NEWS_INDEX_FAILURE,
-} from '../actions/fetchIndex'
+    FETCH_HN_INDEX_REQUEST,
+    FETCH_HN_INDEX_SUCCESS,
+    FETCH_HN_INDEX_FAILURE,
+} from '../actions/fetchHnIndex'
 
-const newsIndex = (state = { newsIds: [], inProgress: false }, action) => {
+const hnIndex = (state = { newsIds: [], inProgress: false }, action) => {
     switch (action.type) {
-        case FETCH_NEWS_INDEX_REQUEST:
+        case FETCH_HN_INDEX_REQUEST:
             return { newsIds: [...state.newsIds], inProgress: action.inProgress };
-        case FETCH_NEWS_INDEX_SUCCESS:
+        case FETCH_HN_INDEX_SUCCESS:
             if (action.newsIds && action.newsIds[0] !== state.newsIds[0]) {
                 return { newsIds: merge(action.newsIds, state.newsIds), inProgress: action.inProgress }
             } else {
                 return { newsIds: [...state.newsIds], inProgress: action.inProgress };
             }
-        case FETCH_NEWS_INDEX_FAILURE:
+        case FETCH_HN_INDEX_FAILURE:
             return { newsIds: [...state.newsIds], inProgress: action.inProgress };
         default:
             return state;
@@ -41,4 +41,4 @@ const merge = (newList, oldList) => {
     return mergeList;
 }
 
-export default newsIndex;
+export default hnIndex;

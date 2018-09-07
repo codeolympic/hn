@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import { newsList, offset } from './news';
-import newsIndex from './newsIndex';
+import { hnList, hnFetchingStat } from './hn';
+import hnIndex from './hnIndex';
 
 const reducers = combineReducers({
-    newsIndex,
-    newsList,
-    offset
+    hnIndex,
+    hnList,
+    hnFetchingStat
 });
 
 export default reducers

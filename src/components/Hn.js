@@ -2,7 +2,7 @@ import bulma from 'bulma/css/bulma.css';
 import moment from 'moment';
 import React from 'react';
 
-class OneNews extends React.Component {
+export default class Hn extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -27,5 +27,3 @@ class OneNews extends React.Component {
         )
     }
 }
-
-export default OneNews;

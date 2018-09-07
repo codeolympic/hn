@@ -30,6 +30,11 @@
     "webpack-dev-server": "^3.1.7"
   },
   "dependencies": {
+    "bulma": "^0.7.1",
+    "express": "^4.16.3",
+    "express-http-to-https": "^1.1.4",
+    "express-static-gzip": "^1.1.1",
+    "moment": "^2.18.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-hot-loader": "^4.1.2",
@@ -37,12 +42,6 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "rxjs": "^5.5.5",
-    "axios": "^0.16.2",
-    "bulma": "^0.7.1",
-    "express": "^4.16.3",
-    "express-http-to-https": "^1.1.4",
-    "express-static-gzip": "^1.1.1",
-    "moment": "^2.18.1"
+    "rxjs": "^5.5.5"
   }
 }

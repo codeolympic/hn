@@ -1,22 +1,26 @@
 import {
-    FETCH_NEWS_REQUEST,
-    FETCH_NEWS_SUCCESS,
-    FETCH_NEWS_FAILURE,
-    UPDATE_OFFSET,
-    NO_MORE_NEWS,
+    FETCH_HN_REQUEST,
+    FETCH_HN_SUCCESS,
+    FETCH_HN_FAILURE,
+    UPDATE_HN_FETCHING_STAT,
+    NO_MORE_HN,
     SORT_BY_SCORE,
     SORT_BY_DATE
-} from '../actions/fetchNews'
+} from '../actions/fetchHn'
 
-const newsList = (state = [], action) => {
+const hnList = (state = [], action) => {
     switch (action.type) {
-        case FETCH_NEWS_REQUEST:
+        case FETCH_HN_REQUEST:
             return state;
-        case FETCH_NEWS_SUCCESS:
-            return [...state, ...action.newsList];
-        case FETCH_NEWS_FAILURE:
+        case FETCH_HN_SUCCESS:
+            if (action.hn.url) {
+                return [...state, action.hn];
+            } else {
+                return state;
+            }
+        case FETCH_HN_FAILURE:
             return state;
-        case NO_MORE_NEWS:
+        case NO_MORE_HN:
             return state;
         case SORT_BY_SCORE:
             return sortByScoreDesc(state);
@@ -27,10 +31,10 @@ const newsList = (state = [], action) => {
     }
 };
 
-const offset = (state = 0, action) => {
+const hnFetchingStat = (state = { offset: 0, remaining: 0 }, action) => {
     switch (action.type) {
-        case UPDATE_OFFSET:
-            return action.offset;
+        case UPDATE_HN_FETCHING_STAT:
+            return { offset: action.offset, remaining: action.remaining, total: action.total };
         default:
             return state;
     }
@@ -58,4 +62,4 @@ const sortByDateDesc = (oldList) => {
     return newList;
 }
 
-export { newsList, offset };
+export { hnList, hnFetchingStat };
