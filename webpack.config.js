@@ -3,23 +3,19 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin")
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 // webpack build require absolute path
 const BUILD_DIR = resolve(__dirname, 'dist');
 const PUBLIC_PATH = resolve(__dirname, '/');
 const SRC_DIR = resolve(__dirname, 'src');
 
-let mode = 'development';
-let devtool = 'source-map';
-if (process.env.NODE_ENV === 'production') {
-    mode = 'production';
-    devtool = 'none';
-}
+const devmode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-    mode: mode,
+    mode: devmode ? 'development' : 'production',
     // be able to debug with the source code
-    devtool: devtool,
+    devtool: devmode ? 'source-map' : 'none',
     entry: SRC_DIR + '/index.js',
     output: {
         filename: '[name].bundle.js',
@@ -44,7 +40,8 @@ module.exports = {
         }),
         new CompressionPlugin({
             test: /\.js$|\.css$|\.html$/
-        })
+        }),
+        new OptimizeCSSAssetsPlugin()
     ],
     module: {
         rules: [

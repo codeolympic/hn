@@ -69,7 +69,7 @@ class HnList extends React.Component {
         return (
             <div>
                 <div style={{ position: 'fixed', width: '100%', height: `${topbarHeight}px`, top: '0' }} className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
-                    <progress style={{ position: 'fixed', width: '100%', height: '1%', display: hnFetchingStat.remaining ? 'inline-block' : 'none' }} className={[bulma['progress'], bulma['is-small']].join(' ')} max={hnFetchingStat.total} value={hnFetchingStat.remaining}></progress>
+                    <progress style={{ position: 'fixed', width: '100%', height: '3px', display: hnFetchingStat.remaining ? 'inline-block' : 'none' }} className={[bulma['progress'], bulma['is-small']].join(' ')} max={hnFetchingStat.total} value={hnFetchingStat.total - hnFetchingStat.remaining}></progress>
                     <div style={{ margin: '0px 15px', textAlign: 'center', alignItems: 'center' }} className={bulma['navbar-brand']}>
                         {this.loadingProgress()}
                         <SortBy />

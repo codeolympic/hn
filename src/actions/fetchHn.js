@@ -63,16 +63,18 @@ export const sortByDate = () => {
 
 export const fetchHn = (newsIds, offset) => {
     return (dispatch) => {
-        dispatch(fetchHnRequest());
-
         if (offset >= newsIds.length) {
             dispatch(noMoreHn())
             return;
         }
 
-        const observables = [];
         let index = offset;
         let remaining = PAGE_SIZE;
+
+        dispatch(fetchHnRequest());
+        dispatch(updateHnFetchingStat(offset, remaining, PAGE_SIZE));
+
+        const observables = [];
         for (; index < (newsIds.length && (offset + PAGE_SIZE)); index++) {
             const ob = Observable.ajax(`https://hacker-news.firebaseio.com/v0/item/${newsIds[index].newsId}.json`);
             observables.push(ob);
