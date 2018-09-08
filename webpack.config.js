@@ -16,7 +16,9 @@ module.exports = {
     mode: devmode ? 'development' : 'production',
     // be able to debug with the source code
     devtool: devmode ? 'source-map' : 'none',
-    entry: SRC_DIR + '/index.js',
+    entry: { 
+        index: `${SRC_DIR}/index.js`
+    },
     output: {
         filename: '[name].bundle.js',
         path: BUILD_DIR,

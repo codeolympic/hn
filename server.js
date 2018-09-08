@@ -20,5 +20,9 @@ app.get('/', (req, res) => {
 })
 
 const port = process.env.PORT || 8080;
+const newsApiKey = process.env.NEWS_API_KEY
+
 app.listen(port);
+
 console.log(`listening to port ${port}`)
+console.log(`newsapi key ${newsApiKey}`)

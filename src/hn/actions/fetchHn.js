@@ -85,9 +85,9 @@ export const fetchHn = (newsIds, offset) => {
             (resp) => {
                 dispatch(updateHnFetchingStat(++offset, --remaining, PAGE_SIZE));
                 dispatch(fetchHnSuccess({ id: nextId++, ...resp.response }));
-            }),
+            },
             (err) => {
                 disptch(fetchHnFailure(err));
-            }
+            });
     }
 };

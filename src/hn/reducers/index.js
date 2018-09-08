@@ -2,10 +2,10 @@ import { combineReducers } from 'redux';
 import { hnList, hnFetchingStat } from './hn';
 import hnIndex from './hnIndex';
 
-const reducers = combineReducers({
+const hnReducers = combineReducers({
     hnIndex,
     hnList,
     hnFetchingStat
 });
 
-export default reducers
+export default hnReducers

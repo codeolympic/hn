@@ -11,7 +11,6 @@ export const fetchHnIndexRequest = () => {
     return {
         type: FETCH_HN_INDEX_REQUEST,
         inProgress: true,
-        newsIds: []
     }
 };
 
@@ -32,7 +31,6 @@ export const fetchHnIndexFailure = (err) => {
     return {
         type: FETCH_HN_INDEX_FAILURE,
         inProgress: false,
-        newsIds: [],
         err
     }
 };
