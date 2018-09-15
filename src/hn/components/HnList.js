@@ -1,7 +1,7 @@
 import bulma from 'bulma/css/bulma.css';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Observable } from 'rxjs/Rx';
+import infinityScroll$ from '../../common/scrolling';
 import { fetchHn } from "../actions/fetchHn";
 import { fetchHnIndex } from "../actions/fetchHnIndex";
 import Hn from './Hn';
@@ -31,26 +31,30 @@ class HnList extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const prevHnIndex = prevProps.hnIndex;
-        const { hnIndex, hnFetchingStat } = this.props;
+        const { hnIndex, hnList, hnFetchingStat } = this.props;
+
+        if (hnIndex.inProgress || hnList.inProgress) {
+            return;
+        }
 
         // fetching news while index is updated
         if (hnIndex.newsIds.length === 0 || hnIndex.newsIds[0] !== prevHnIndex.newsIds[0]) {
-            this.props.fetchHn(hnIndex.newsIds, hnFetchingStat.offset);       
+            this.props.fetchHn(hnIndex.newsIds, hnFetchingStat.offset);
         }
     }
 
     componentDidMount() {
-        scroll$.subscribe(
+        infinityScroll$.subscribe(
             (position) => {
-                const { hnIndex, hnFetchingStat } = this.props;
+                const { hnIndex, hnList, hnFetchingStat } = this.props;
 
                 // use innerHeight for mobile browser
                 const viewHeight = window.innerHeight || position.clientHeight;
 
-                if (position.scrollTop + viewHeight >= (position.scrollHeight * this.LOADING_THRESHOLD_FACTOR)) {
+                if (!hnList.inProgress && position.scrollTop + viewHeight >= (position.scrollHeight * this.LOADING_THRESHOLD_FACTOR)) {
                     // scroll to bottom
                     this.props.fetchHn(hnIndex.newsIds, hnFetchingStat.offset);
-                } else if (position.scrollTop <= 0) {
+                } else if (!hnIndex.inProgress && position.scrollTop <= 0) {
                     // scroll to top
                     this.props.fetchHnIndex();
                 }
@@ -60,10 +64,10 @@ class HnList extends React.Component {
 
     render() {
         const { hnIndex, hnList, hnFetchingStat } = this.props;
-        const newsCount = hnIndex.newsIds && hnList ? `${hnIndex.newsIds.length}/${hnList.length}` : '';
+        const newsCount = hnIndex.newsIds && hnList.news ? `${hnIndex.newsIds.length}/${hnList.news.length}` : '';
         const progressMax = hnFetchingStat.total || 0;
-        const progressDone =  hnFetchingStat.total - hnFetchingStat.remaining || 0;
- 
+        const progressDone = hnFetchingStat.total - hnFetchingStat.remaining || 0;
+
         return (
             <div>
                 <div style={{ position: 'fixed', width: '100%', height: `${this.TOPBAR_HEIGHT}px`, top: '0' }} className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
@@ -74,20 +78,12 @@ class HnList extends React.Component {
                     </div>
                 </div>
                 <div style={{ marginTop: `${this.TOPBAR_HEIGHT * 1.3}px` }}>
-                    {hnList.map((hn) => <Hn key={hn.id} {...hn}></Hn>)}
+                    {hnList.news.map((hn) => <Hn key={hn.id} {...hn}></Hn>)}
                 </div>
             </div>
         )
     }
 }
-
-const scroll$ = Observable.fromEvent(window, 'scroll')
-    .debounceTime(275)
-    .map(e => ({
-        scrollHeight: e.target.scrollingElement.scrollHeight,
-        scrollTop: e.target.scrollingElement.scrollTop,
-        clientHeight: e.target.scrollingElement.clientHeight
-    }))
 
 const mapStateToProps = ({ hnIndex, hnList, hnFetchingStat }) => ({ hnIndex, hnList, hnFetchingStat });
 

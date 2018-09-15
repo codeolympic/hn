@@ -9,15 +9,13 @@ export const FETCH_HN_INDEX_FAILURE = 'FETCH_HN_INDEX_FAILURE';
 
 export const fetchHnIndexRequest = () => {
     return {
-        type: FETCH_HN_INDEX_REQUEST,
-        inProgress: true,
+        type: FETCH_HN_INDEX_REQUEST
     }
 };
 
 export const fetchHnIndexSuccess = (newsIds) => {
     return {
         type: FETCH_HN_INDEX_SUCCESS,
-        inProgress: false,
         newsIds: newsIds.map((newsId) => {
             return {
                 id: nextId++,
@@ -30,7 +28,6 @@ export const fetchHnIndexSuccess = (newsIds) => {
 export const fetchHnIndexFailure = (err) => {
     return {
         type: FETCH_HN_INDEX_FAILURE,
-        inProgress: false,
         err
     }
 };

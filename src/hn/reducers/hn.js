@@ -1,31 +1,24 @@
-import {
-    FETCH_HN_REQUEST,
-    FETCH_HN_SUCCESS,
-    FETCH_HN_FAILURE,
-    UPDATE_HN_FETCHING_STAT,
-    NO_MORE_HN,
-    SORT_BY_SCORE,
-    SORT_BY_DATE
-} from '../actions/fetchHn'
+import { sortByDateDesc, sortByScoreDesc, SORT_BY_DATE, SORT_BY_SCORE } from '../../common/sorting';
+import { FETCH_HN_FAILURE, FETCH_HN_REQUEST, FETCH_HN_SUCCESS, NO_MORE_HN, UPDATE_HN_FETCHING_STAT } from '../actions/fetchHn';
 
-const hnList = (state = [], action) => {
+const hnList = (state = { news: [], inProgress: false }, action) => {
     switch (action.type) {
         case FETCH_HN_REQUEST:
-            return state;
+            return { news: state.news, inProgress: true };
         case FETCH_HN_SUCCESS:
             if (action.hn.url) {
-                return [...state, action.hn];
+                return { news: [...state.news, action.hn], inProgress: false };
             } else {
-                return state;
+                return { news: state.news, inProgress: false };
             }
         case FETCH_HN_FAILURE:
-            return state;
+            return { news: state.news, inProgress: false };
         case NO_MORE_HN:
-            return state;
+            return { news: state.news, inProgress: false };
         case SORT_BY_SCORE:
-            return sortByScoreDesc(state);
+            return { news: sortByScoreDesc(state.news), inProgress: false };
         case SORT_BY_DATE:
-            return sortByDateDesc(state);
+            return { news: sortByDateDesc(state.news, (oneNews) => oneNews.time), inProgress: false };
         default:
             return state;
     }
@@ -40,26 +33,5 @@ const hnFetchingStat = (state = { offset: 0, remaining: 0 }, action) => {
     }
 }
 
-const sortByScoreDesc = (oldList) => {
-    const newList = [...oldList];
-    newList.sort((a, b) => {
-        const aScore = parseInt(a.score) || 0;
-        const bScore = parseInt(b.score) || 0;
-        return bScore - aScore;
-    })
-
-    return newList;
-}
-
-const sortByDateDesc = (oldList) => {
-    const newList = [...oldList];
-    newList.sort((a, b) => {
-        const aTime = parseInt(a.time) || 0;
-        const bTime = parseInt(b.time) || 0;
-        return bTime - aTime;
-    })
-
-    return newList;
-}
-
 export { hnList, hnFetchingStat };
+

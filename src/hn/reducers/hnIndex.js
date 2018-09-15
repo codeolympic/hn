@@ -1,21 +1,17 @@
-import {
-    FETCH_HN_INDEX_REQUEST,
-    FETCH_HN_INDEX_SUCCESS,
-    FETCH_HN_INDEX_FAILURE,
-} from '../actions/fetchHnIndex'
+import { FETCH_HN_INDEX_FAILURE, FETCH_HN_INDEX_REQUEST, FETCH_HN_INDEX_SUCCESS } from '../actions/fetchHnIndex';
 
 const hnIndex = (state = { newsIds: [], inProgress: false }, action) => {
     switch (action.type) {
         case FETCH_HN_INDEX_REQUEST:
-            return { newsIds: [...state.newsIds], inProgress: action.inProgress };
+            return { newsIds: [...state.newsIds], inProgress: true };
         case FETCH_HN_INDEX_SUCCESS:
             if (action.newsIds && action.newsIds[0] !== state.newsIds[0]) {
-                return { newsIds: merge(action.newsIds, state.newsIds), inProgress: action.inProgress }
+                return { newsIds: merge(action.newsIds, state.newsIds), inProgress: false }
             } else {
-                return { newsIds: [...state.newsIds], inProgress: action.inProgress };
+                return { newsIds: [...state.newsIds], inProgress: false };
             }
         case FETCH_HN_INDEX_FAILURE:
-            return { newsIds: [...state.newsIds], inProgress: action.inProgress };
+            return { newsIds: [...state.newsIds], inProgress: false };
         default:
             return state;
     }

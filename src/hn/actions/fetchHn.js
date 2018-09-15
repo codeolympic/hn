@@ -9,8 +9,6 @@ export const FETCH_HN_FAILURE = 'FETCH_HN_FAILURE';
 export const UDATE_HN_PAGE_REMAINING = 'UDATE_HN_PAGE_REMAINING';
 export const UPDATE_HN_FETCHING_STAT = 'UPDATE_HN_OFFSET';
 export const NO_MORE_HN = 'NO_MORE_HN';
-export const SORT_BY_SCORE = 'SORT_BY_SCORE';
-export const SORT_BY_DATE = 'SORT_BY_DATE';
 
 let nextId = 0;
 
@@ -48,18 +46,6 @@ export const noMoreHn = () => {
         type: NO_MORE_HN
     }
 };
-
-export const sortByScore = () => {
-    return {
-        type: SORT_BY_SCORE
-    }
-}
-
-export const sortByDate = () => {
-    return {
-        type: SORT_BY_DATE
-    }
-}
 
 export const fetchHn = (newsIds, offset) => {
     return (dispatch) => {

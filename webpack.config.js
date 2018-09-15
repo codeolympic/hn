@@ -2,7 +2,6 @@ const resolve = require('path').resolve;
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CompressionPlugin = require("compression-webpack-plugin")
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 // webpack build require absolute path
@@ -40,9 +39,6 @@ module.exports = {
             title: 'HN',
             template: SRC_DIR + '/index.ejs'
         }),
-        new CompressionPlugin({
-            test: /\.js$|\.css$|\.html$/
-        }),
         new OptimizeCSSAssetsPlugin()
     ],
     module: {
@@ -73,6 +69,7 @@ module.exports = {
         contentBase: BUILD_DIR,
         compress: false,
         port: 9000,
-        inline: false // no need when HotModuleReplacement is used
+        inline: false, // no need when HotModuleReplacement is used
+        historyApiFallback: true
     }
 };
