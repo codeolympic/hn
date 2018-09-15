@@ -1,5 +1,4 @@
-import 'rxjs/add/observable/dom/ajax';
-import { Observable } from 'rxjs/Observable';
+import { ajax } from 'rxjs/ajax';
 
 let nextId = 0;
 
@@ -36,7 +35,7 @@ export const fetchHnIndex = () => {
     return (dispatch) => {
         dispatch(fetchHnIndexRequest());
 
-        return Observable.ajax('https://hacker-news.firebaseio.com/v0/topstories.json').subscribe(
+        return ajax('https://hacker-news.firebaseio.com/v0/topstories.json').subscribe(
             (resp) => {
                 dispatch(fetchHnIndexSuccess(resp.response));
             },

@@ -1,5 +1,4 @@
-import 'rxjs/add/observable/dom/ajax';
-import { Observable } from 'rxjs/Rx';
+import { ajax } from 'rxjs/ajax';
 
 export const PAGE_SIZE = 20;
 export const DEFAULT_COUNTRY = 'us';
@@ -35,12 +34,11 @@ export const fetchNews = (nextPage) => {
     return (dispatch) => {
         dispatch(fetchNewsRequest());
 
-        return Observable.ajax(`/api/na?country=${DEFAULT_COUNTRY}&page=${nextPage}&pageSize=${PAGE_SIZE}`)
-            .catch((err) => {
-                dispatch(fetchNewsFailure(err));
-                return Observable.empty();
-            }).subscribe((resp) => {
+        return ajax(`/api/na?country=${DEFAULT_COUNTRY}&page=${nextPage}&pageSize=${PAGE_SIZE}`)
+            .subscribe((resp) => {
                 dispatch(fetchNewsSuccess(format(resp.response), ++nextPage));
+            }, (err) => {
+                dispatch(fetchNewsFailure(err));
             });
     }
 };

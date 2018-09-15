@@ -1,5 +1,5 @@
-import 'rxjs/add/observable/dom/ajax';
-import { Observable } from 'rxjs/Rx';
+import { merge } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
 
 export const PAGE_SIZE = 20;
 
@@ -62,12 +62,12 @@ export const fetchHn = (newsIds, offset) => {
 
         const observables = [];
         for (; index < (newsIds.length && (offset + PAGE_SIZE)); index++) {
-            const ob = Observable.ajax(`https://hacker-news.firebaseio.com/v0/item/${newsIds[index].newsId}.json`);
+            const ob = ajax(`https://hacker-news.firebaseio.com/v0/item/${newsIds[index].newsId}.json`);
             observables.push(ob);
         }
 
         // instead of doing batch process (Promise.all), using stream process (Observable.merge)
-        return Observable.merge(...observables).subscribe(
+        return merge(...observables).subscribe(
             (resp) => {
                 dispatch(updateHnFetchingStat(++offset, --remaining, PAGE_SIZE));
                 dispatch(fetchHnSuccess({ id: nextId++, ...resp.response }));

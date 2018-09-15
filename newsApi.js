@@ -35,11 +35,11 @@ router.get('/na', (req, res) => {
 });
 
 const fetchHeadLines = (country, page, pageSize) => {
-    // return fetchRemote();
+    // return fetchRemote(country, page, pageSize);
     return fetchMock();
 }
 
-const fetchRemote = () => {
+const fetchRemote = (country, page, pageSize) => {
     return new Promise((resolve, reject) => {
         https.get(`https://newsapi.org/v2/top-headlines?country=${country}&pageSize=${pageSize}&page=${page}&apiKey=${NEWS_API_KEY}`, (res) => {
             const data = [];
