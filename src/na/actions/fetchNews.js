@@ -1,6 +1,6 @@
 import { ajax } from 'rxjs/ajax';
 
-export const PAGE_SIZE = 20;
+export const PAGE_SIZE = 30;
 export const DEFAULT_COUNTRY = 'us';
 
 export const FETCH_NEWS_REQUEST = 'FETCH_NEWS_REQUEST';

@@ -1,5 +1,6 @@
 const resolve = require('path').resolve;
 const webpack = require('webpack');
+const CompressionPlugin = require('compression-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
@@ -39,7 +40,8 @@ module.exports = {
             title: 'HN',
             template: SRC_DIR + '/index.ejs'
         }),
-        new OptimizeCSSAssetsPlugin()
+        new OptimizeCSSAssetsPlugin(),
+        new CompressionPlugin()
     ],
     module: {
         rules: [

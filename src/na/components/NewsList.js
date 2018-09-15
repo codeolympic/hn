@@ -27,20 +27,20 @@ class NewsList extends React.Component {
     }
 
     componentWillUnmount() {
-        scroll$.unsubscribe();
+        infinityScroll$.unsubscribe();
     }
 
     componentDidMount() {
         infinityScroll$.subscribe(
             (position) => {
-                const { newsList } = this.props;
+                const { newsList, fetchNews } = this.props;
 
                 // use innerHeight for mobile browser
                 const viewHeight = window.innerHeight || position.clientHeight;
 
                 if (!newsList.inProgress && position.scrollTop + viewHeight >= (position.scrollHeight * this.LOADING_THRESHOLD_FACTOR)) {
                     // scroll to bottom
-                    this.props.fetchNews(newsList.nextPage);
+                    fetchNews(newsList.nextPage);
                 }
             },
             (err) => console.log(err))
@@ -58,8 +58,8 @@ class NewsList extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div hidden={!newsList.error} className={[bulma['notification'], bulma['is-danger']].join(' ')}>
-                    Fetching news failed, please try again later!
+                <div hidden={!newsList.error || (newsList.news && newsList.news.length > 1)} className={[bulma['notification'], bulma['is-danger']].join(' ')}>
+                    Fetching news failed, please try again later
                 </div>
                 <div style={{ marginTop: `${this.TOPBAR_HEIGHT * 1.3}px` }}>
                     {newsList.news.map((oneNews) => <OneNews key={oneNews.id} {...oneNews}></OneNews>)}

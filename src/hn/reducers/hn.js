@@ -34,4 +34,3 @@ const hnFetchingStat = (state = { offset: 0, remaining: 0 }, action) => {
 }
 
 export { hnList, hnFetchingStat };
-

@@ -26,12 +26,12 @@ class HnList extends React.Component {
     }
 
     componentWillUnmount() {
-        scroll$.unsubscribe();
+        infinityScroll$.unsubscribe();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const prevHnIndex = prevProps.hnIndex;
-        const { hnIndex, hnList, hnFetchingStat } = this.props;
+        const { hnIndex, hnList, hnFetchingStat, fetchHn } = this.props;
 
         if (hnIndex.inProgress || hnList.inProgress) {
             return;
@@ -39,24 +39,24 @@ class HnList extends React.Component {
 
         // fetching news while index is updated
         if (hnIndex.newsIds.length === 0 || hnIndex.newsIds[0] !== prevHnIndex.newsIds[0]) {
-            this.props.fetchHn(hnIndex.newsIds, hnFetchingStat.offset);
+            fetchHn(hnIndex.newsIds, hnFetchingStat.offset);
         }
     }
 
     componentDidMount() {
         infinityScroll$.subscribe(
             (position) => {
-                const { hnIndex, hnList, hnFetchingStat } = this.props;
+                const { hnIndex, hnList, hnFetchingStat, fetchHn, fetchHnIndex } = this.props;
 
                 // use innerHeight for mobile browser
                 const viewHeight = window.innerHeight || position.clientHeight;
 
                 if (!hnList.inProgress && position.scrollTop + viewHeight >= (position.scrollHeight * this.LOADING_THRESHOLD_FACTOR)) {
                     // scroll to bottom
-                    this.props.fetchHn(hnIndex.newsIds, hnFetchingStat.offset);
+                    fetchHn(hnIndex.newsIds, hnFetchingStat.offset);
                 } else if (!hnIndex.inProgress && position.scrollTop <= 0) {
                     // scroll to top
-                    this.props.fetchHnIndex();
+                    fetchHnIndex();
                 }
             },
             (err) => console.log(err))
