@@ -20,9 +20,7 @@ class NewsList extends React.Component {
 
     constructor(props) {
         super(props);
-
         const { fetchNews, newsList } = this.props;
-
         fetchNews(newsList.nextPage);
     }
 
@@ -48,18 +46,17 @@ class NewsList extends React.Component {
 
     render() {
         const { newsList } = this.props;
+        const topbarColor = newsList.error ? bulma['is-danger'] : bulma['is-warning']
 
         return (
             <div>
-                <div hidden={newsList.error}>
-                    <div style={{ position: 'fixed', width: '100%', height: `${this.TOPBAR_HEIGHT}px`, top: '0' }} className={[bulma['navbar'], bulma['is-warning']].join(' ')}>
+                <div>
+                    <div style={{ position: 'fixed', width: '100%', height: `${this.TOPBAR_HEIGHT}px`, top: '0' }} className={[bulma['navbar'], topbarColor].join(' ')}>
                         <div style={{ margin: '0px 15px', textAlign: 'center', alignItems: 'center' }} className={bulma['navbar-brand']}>
                             <SortBy />
+                            <div style={{ textAlign: 'center' }} hidden={!newsList.error}>{newsList.error}</div>
                         </div>
                     </div>
-                </div>
-                <div style={{ textAlign: 'center' }} hidden={!newsList.error || (newsList.news && newsList.news.length > 1)} className={[bulma['notification'], bulma['is-danger']].join(' ')}>
-                    Fetching news failed, please try again later
                 </div>
                 <div style={{ marginTop: `${this.TOPBAR_HEIGHT * 1.3}px` }}>
                     {newsList.news.map((oneNews) => <OneNews key={oneNews.id} {...oneNews}></OneNews>)}

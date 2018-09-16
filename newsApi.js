@@ -29,7 +29,12 @@ router.get('/na', (req, res) => {
     }
 
     fetchHeadLines(country.trim(), page, pageSize).then((json) => {
-        res.set('Cache-Control', 'public, immutable, max-age=3600');
+        let maxAge = 600;
+        if (json.articles && json.articles.length > 0) {
+            maxAge = 3600;
+        }
+
+        res.set('Cache-Control', `public, immutable, max-age=${maxAge}`);
         res.send(json);
     });
 });
