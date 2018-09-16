@@ -35,8 +35,8 @@ router.get('/na', (req, res) => {
 });
 
 const fetchHeadLines = (country, page, pageSize) => {
-    // return fetchRemote(country, page, pageSize);
-    return fetchMock();
+    return fetchRemote(country, page, pageSize);
+    // return fetchMock();
 }
 
 const fetchRemote = (country, page, pageSize) => {

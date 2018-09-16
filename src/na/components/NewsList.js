@@ -58,7 +58,7 @@ class NewsList extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div hidden={!newsList.error || (newsList.news && newsList.news.length > 1)} className={[bulma['notification'], bulma['is-danger']].join(' ')}>
+                <div style={{ textAlign: 'center' }} hidden={!newsList.error || (newsList.news && newsList.news.length > 1)} className={[bulma['notification'], bulma['is-danger']].join(' ')}>
                     Fetching news failed, please try again later
                 </div>
                 <div style={{ marginTop: `${this.TOPBAR_HEIGHT * 1.3}px` }}>

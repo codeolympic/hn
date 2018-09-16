@@ -37,7 +37,7 @@ module.exports = {
         }),
         // generate the index.html
         new HtmlWebpackPlugin({
-            title: 'HN',
+            title: 'Hacker News',
             template: SRC_DIR + '/index.ejs'
         }),
         new OptimizeCSSAssetsPlugin(),
