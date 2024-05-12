@@ -1,4 +1,3 @@
-https://hn-wduan.herokuapp.com/
 
 Install dependencies
 ```
